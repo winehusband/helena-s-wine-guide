@@ -15,11 +15,23 @@ interface QuestionOption {
 interface QuestionViewProps {
   question: string;
   options: QuestionOption[];
+  onBack?: () => void;
 }
 
-export const QuestionView = ({ question, options }: QuestionViewProps) => {
+export const QuestionView = ({ question, options, onBack }: QuestionViewProps) => {
   return (
     <div className="animate-fade-in">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-sm font-medium text-muted-foreground 
+                   hover:text-foreground transition-colors mb-6 focus:outline-none 
+                   focus:ring-2 focus:ring-primary focus:ring-offset-2 
+                   focus:ring-offset-background rounded-full px-3 py-1"
+        >
+          Back
+        </button>
+      )}
       <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-8 leading-relaxed">
         {question}
       </h2>

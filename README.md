@@ -1,73 +1,181 @@
-# Welcome to your Lovable project
+HelenaSips Wine Flow Widget – Project Brief
 
-## Project info
+1. Overview
 
-**URL**: https://lovable.dev/projects/1674aa76-1b30-4697-aa91-35da8b641b3f
+Build a small, embeddable web widget that lets a user walk through the Guardian-style wine decision flow and ends with a wine recommendation.
 
-## How can I edit this code?
+MVP:
+	•	Fully client-side
+	•	Uses a JSON decision tree for logic
+	•	Styled in HelenaSips branding (or easily swappable once Lovable gives us a layout)
+	•	Future-ready to swap the static wine names for real wines pulled from Supabase
 
-There are several ways of editing your application.
+The widget will later be embedded on helenasips.com inside an existing page (likely via iframe or script tag).
 
-**Use Lovable**
+2. Goals
+	1.	Recreate the decision-tree experience from the magazine:
+	•	One question at a time
+	•	Simple multiple-choice answers
+	•	Ends in a wine suggestion
+	2.	Make it fun and on-brand:
+	•	Friendly copy, playful microcopy
+	•	Works nicely on mobile
+	3.	Separate data from logic:
+	•	Decision tree stored in a JSON file
+	•	UI logic reads from JSON, no hard-coded branches in components
+	4.	Make it easy to upgrade later:
+	•	Each terminal “wine” node should have a stable wineKey that can be used to fetch a record from Supabase later.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/1674aa76-1b30-4697-aa91-35da8b641b3f) and start prompting.
+Non-goals for MVP:
+	•	No real Supabase calls yet
+	•	No login, accounts or analytics
+	•	No CMS editing of the tree
 
-Changes made via Lovable will be committed automatically to this repo.
+3. Tech stack
+	•	Frontend: React + TypeScript (Vite or Next, but keep it simple, assume Vite SPA)
+	•	Styling:
+	•	Plain CSS or Tailwind. Code should not depend on any server-side features.
+	•	Layout can be replaced later with JSX from Lovable.
+	•	Data: Local JSON file in src/data/wineFlow.json
 
-**Use your preferred IDE**
+No backend needed for MVP.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+4. Data model
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Create src/data/wineFlow.json with this shape:
 
-Follow these steps:
+// conceptual types
+type NodeType = 'question' | 'message' | 'wine';
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+interface BaseNode {
+  id: string;
+  type: NodeType;
+}
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+interface QuestionNode extends BaseNode {
+  type: 'question';
+  text: string;
+  options: {
+    label: string;
+    next: Node; // reference by id in actual JSON
+  }[];
+}
 
-# Step 3: Install the necessary dependencies.
-npm i
+interface MessageNode extends BaseNode {
+  type: 'message';
+  text: string;
+  next: Node;
+}
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+interface WineNode extends BaseNode {
+  type: 'wine';
+  wine: string;      // display name
+  wineKey: string;   // stable key for Supabase lookup later, e.g. 'chinon', 'champagne'
+  blurb?: string;    // optional fun text now
+}
 
-**Edit a file directly in GitHub**
+Implementation detail for JSON: use ids and a separate lookup map rather than nesting full objects everywhere, to keep it simple to change. Codex can choose either nested or map-based, as long as it is consistent and easy to traverse.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+For now, wineKey can just be a kebab-case version of the wine name.
 
-**Use GitHub Codespaces**
+5. User flow
+	1.	Widget loads and shows:
+	•	Title: “Go with the flow”
+	•	Intro text: short line like “Answer a few questions and Helena will point you at your next bottle”
+	2.	Show one node at a time:
+	•	If node is question: render text and buttons for each option.label
+	•	If node is message: show text and a single “Next” button
+	•	If node is wine: show final recommendation panel
+	3.	Navigation:
+	•	User taps an option → widget moves to corresponding next node
+	•	Provide a Back button (except on root) using simple history stack
+	•	Provide a Start again button on result screen
+	4.	Result screen (wine node):
+	•	Show wine name
+	•	Optional blurb
+	•	For future: add a placeholder “Coming soon: real bottles from Helena’s cellar” and display the wineKey for debugging
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+6. UI behaviour and layout
 
-## What technologies are used for this project?
+MVP behaviour:
+	•	Card-style layout with:
+	•	Question text at top
+	•	Options as big clickable buttons
+	•	Progress hint like “Step 3 of 7” (approximate based on history length vs max path length or just omit for now)
+	•	Smooth but simple transitions (eg fade or slide) when moving between nodes
+	•	Responsive design:
+	•	Works well on phones first
 
-This project is built with:
+Branding hooks:
+	•	Use a simple theming system so colours and fonts can be swapped:
+	•	Define a theme.ts exporting colours, font stack, spacing
+	•	Use these values in components rather than magic numbers
+	•	For now just use placeholder colours close to HelenaSips palette and system fonts
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Later, we can paste in JSX/CSS from Lovable to replace the core layout while keeping the logic and data structures intact.
 
-## How can I deploy this project?
+7. File and folder structure
 
-Simply open [Lovable](https://lovable.dev/projects/1674aa76-1b30-4697-aa91-35da8b641b3f) and click on Share -> Publish.
+Proposal:
 
-## Can I connect a custom domain to my Lovable project?
+/src
+  /components
+    FlowWidget.tsx      // main component, orchestrates everything
+    QuestionView.tsx
+    MessageView.tsx
+    ResultView.tsx
+    ProgressBar.tsx     // optional
+  /data
+    wineFlow.json       // decision tree
+  /lib
+    flowEngine.ts       // helper functions: getNodeById, goToNextNode, etc
+    types.ts            // Node types and interfaces
+  theme.ts              // colours, spacing, fonts
+  main.tsx
+  App.tsx
 
-Yes, you can!
+App.tsx just renders <FlowWidget />.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+8. Future Supabase integration (design now, implement later)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Design the data model so that later we can:
+	•	Map each wineKey to a row in a Supabase table, for example:
+
+table: wines
+columns: id, wine_key, name, description, image_url, buy_url, etc
+
+
+	•	At result time, we will:
+	•	Call Supabase client with wineKey
+	•	Display the returned data instead of just the static name
+
+For MVP:
+	•	Do not import Supabase
+	•	Just show wine name and wineKey somewhere in small text so we can verify it matches.
+
+9. Requirements for Codex
+
+Codex, you are a senior React and TypeScript engineer. Please:
+	1.	Initial setup
+	•	Create a new Vite + React + TypeScript project in this folder
+	•	Configure a minimal theme.ts with a few colours and spacing values
+	•	Add Tailwind or simple CSS modules (keep it light)
+	2.	Implement the data model
+	•	Define the TypeScript types in src/lib/types.ts
+	•	Create src/data/wineFlow.json and populate it with the full decision tree (you can use the structure I have provided separately)
+	3.	Build the flow engine
+	•	Implement src/lib/flowEngine.ts with helpers:
+	•	loadFlow() – loads JSON
+	•	getNodeById(id) – returns corresponding node
+	•	Store current node id and history in React state inside FlowWidget
+	4.	Build the UI
+	•	FlowWidget decides which view to show based on node type
+	•	QuestionView, MessageView, ResultView are dumb presentational components
+	•	Include Back and Start again buttons where appropriate
+	5.	Make it easy to embed
+	•	Ensure the widget can be rendered within any container <div> with 100% width
+	•	Export FlowWidget as default so it can be imported into other projects later
+	6.	Keep code clean
+	•	No giant monolithic components
+	•	Typesafe props
+	•	Clear comments where future Supabase calls will go

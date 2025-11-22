@@ -10,11 +10,25 @@
 interface MessageViewProps {
   message: string;
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export const MessageView = ({ message, onNext }: MessageViewProps) => {
+export const MessageView = ({ message, onNext, onBack }: MessageViewProps) => {
   return (
     <div className="animate-fade-in text-center">
+      {onBack && (
+        <div className="text-left">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-sm font-medium text-muted-foreground 
+                     hover:text-foreground transition-colors mb-6 focus:outline-none 
+                     focus:ring-2 focus:ring-primary focus:ring-offset-2 
+                     focus:ring-offset-background rounded-full px-3 py-1"
+          >
+            Back
+          </button>
+        </div>
+      )}
       <div className="mb-8">
         <p className="text-lg md:text-xl text-foreground leading-relaxed">
           {message}

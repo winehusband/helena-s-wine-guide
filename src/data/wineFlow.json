@@ -1,0 +1,220 @@
+{
+  "rootId": "root",
+  "nodes": {
+    "root": {
+      "id": "root",
+      "type": "question",
+      "text": "You've made it through the blistering cold to the bottle shop. Is it open?",
+      "options": [
+        { "label": "No",  "nextId": "closed_1" },
+        { "label": "Yes", "nextId": "match_food_q" }
+      ]
+    },
+
+    "closed_1": {
+      "id": "closed_1",
+      "type": "message",
+      "text": "Back home with you!",
+      "nextId": "closed_2"
+    },
+
+    "closed_2": {
+      "id": "closed_2",
+      "type": "message",
+      "text": "Why are you trying to buy wine at 9am? Come back when it's open.",
+      "nextId": "END"
+    },
+
+    "match_food_q": {
+      "id": "match_food_q",
+      "type": "question",
+      "text": "Are you particularly bothered about matching your wine with your food?",
+      "options": [
+        { "label": "Yes", "nextId": "whole_point_msg" },
+        { "label": "I'm more concerned with having enough of it", "nextId": "numbers_q" }
+      ]
+    },
+
+    "whole_point_msg": {
+      "id": "whole_point_msg",
+      "type": "message",
+      "text": "Isn't that kind of the whole point?",
+      "nextId": "meat_q"
+    },
+
+    "meat_q": {
+      "id": "meat_q",
+      "type": "question",
+      "text": "Fair enough. What meat are we talking for the main meal?",
+      "options": [
+        { "label": "A white meat, like chicken or turkey", "nextId": "trad_q" },
+        { "label": "How dare you assume I'm having meat", "nextId": "veggie_q" },
+        { "label": "A big hunk of red meat, like beef or lamb", "nextId": "hemisphere_q" }
+      ]
+    },
+
+    "trad_q": {
+      "id": "trad_q",
+      "type": "question",
+      "text": "A traditionalist, I like it. And are you more of a red or white wine household?",
+      "options": [
+        { "label": "Red, please!", "nextId": "chinon" },
+        { "label": "Erm, white? What else?", "nextId": "white_burgundy" }
+      ]
+    },
+
+    "veggie_q": {
+      "id": "veggie_q",
+      "type": "question",
+      "text": "Oops, sorry. Is this a nut roast or a veggie vibe?",
+      "options": [
+        { "label": "Vegetables prepared in ways beyond comprehension", "nextId": "orange_wine" },
+        { "label": "Nut roasts are a classic for a reason", "nextId": "xinomavro" }
+      ]
+    },
+
+    "hemisphere_q": {
+      "id": "hemisphere_q",
+      "type": "question",
+      "text": "OK, Hannibal. And do you like your reds from the northern or southern hemisphere?",
+      "options": [
+        { "label": "No school like the old school", "nextId": "chianti" },
+        { "label": "I love trying something new", "nextId": "australian_red" }
+      ]
+    },
+
+    "numbers_q": {
+      "id": "numbers_q",
+      "type": "question",
+      "text": "Ah, so it's a numbers game. Are you more concerned with wine for the morning or the main event?",
+      "options": [
+        { "label": "Actually, I'm looking for something after dinner", "nextId": "classic_kooky_q" },
+        { "label": "It's the main meal I'm worried about", "nextId": "five_thousand_q" },
+        { "label": "I'm looking for fizz", "nextId": "budget_q" }
+      ]
+    },
+
+    "classic_kooky_q": {
+      "id": "classic_kooky_q",
+      "type": "question",
+      "text": "Something classic or something kooky?",
+      "options": [
+        { "label": "Don't make this any more difficult than it has to be", "nextId": "port" },
+        { "label": "Expect the unexpected!", "nextId": "tokaji" }
+      ]
+    },
+
+    "five_thousand_q": {
+      "id": "five_thousand_q",
+      "type": "question",
+      "text": "And are you looking to water the five thousand with a red or white wine?",
+      "options": [
+        { "label": "One crowdpleasing white, stat", "nextId": "white_boxed" },
+        { "label": "It's a red-only house", "nextId": "red_magnum" }
+      ]
+    },
+
+    "budget_q": {
+      "id": "budget_q",
+      "type": "question",
+      "text": "And what's your budget per bottle?",
+      "options": [
+        { "label": "Not bothered, I just want lots of it", "nextId": "zweigelt" },
+        { "label": "Around £10 please!", "nextId": "pignoletto" },
+        { "label": "Money is no object", "nextId": "champagne" }
+      ]
+    },
+
+    "chinon": {
+      "id": "chinon",
+      "type": "wine",
+      "wine": "Chinon",
+      "wineKey": "chinon"
+    },
+
+    "white_burgundy": {
+      "id": "white_burgundy",
+      "type": "wine",
+      "wine": "White Burgundy",
+      "wineKey": "white_burgundy"
+    },
+
+    "orange_wine": {
+      "id": "orange_wine",
+      "type": "wine",
+      "wine": "Orange Wine",
+      "wineKey": "orange_wine"
+    },
+
+    "xinomavro": {
+      "id": "xinomavro",
+      "type": "wine",
+      "wine": "Xinomavro",
+      "wineKey": "xinomavro"
+    },
+
+    "chianti": {
+      "id": "chianti",
+      "type": "wine",
+      "wine": "Chianti",
+      "wineKey": "chianti"
+    },
+
+    "australian_red": {
+      "id": "australian_red",
+      "type": "wine",
+      "wine": "Australian Red",
+      "wineKey": "australian_red"
+    },
+
+    "port": {
+      "id": "port",
+      "type": "wine",
+      "wine": "Port",
+      "wineKey": "port"
+    },
+
+    "tokaji": {
+      "id": "tokaji",
+      "type": "wine",
+      "wine": "Tokaji Late Harvest",
+      "wineKey": "tokaji_late_harvest"
+    },
+
+    "white_boxed": {
+      "id": "white_boxed",
+      "type": "wine",
+      "wine": "White Boxed Wine",
+      "wineKey": "white_boxed_wine"
+    },
+
+    "red_magnum": {
+      "id": "red_magnum",
+      "type": "wine",
+      "wine": "Red Magnum",
+      "wineKey": "red_magnum"
+    },
+
+    "zweigelt": {
+      "id": "zweigelt",
+      "type": "wine",
+      "wine": "Zweigelt",
+      "wineKey": "zweigelt"
+    },
+
+    "pignoletto": {
+      "id": "pignoletto",
+      "type": "wine",
+      "wine": "Pignoletto",
+      "wineKey": "pignoletto"
+    },
+
+    "champagne": {
+      "id": "champagne",
+      "type": "wine",
+      "wine": "Champagne",
+      "wineKey": "champagne"
+    }
+  }
+}
+
