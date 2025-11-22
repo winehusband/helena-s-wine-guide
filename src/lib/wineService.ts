@@ -1,5 +1,14 @@
 import { supabase, hasSupabaseConfig, supabaseInitError } from './supabaseClient';
 import { wineKeySearchTerms, excludeSparklingFor } from './wineKeyMap';
+import {
+  PRICE_THRESHOLD_NEVER_SHOW,
+  PRICE_THRESHOLD_SHOW_WITH_MESSAGE,
+  QUERY_LIMIT_WITH_FILTER,
+  QUERY_LIMIT_NO_FILTER
+} from './constants';
+import { z } from 'zod';
+
+const wineKeySchema = z.string().min(1).max(100);
 
 export interface WineRow {
   id: string;
@@ -19,7 +28,7 @@ async function fetchTopByTerm(term: string, excludeSparkling: boolean = false): 
   if (!supabase) return null;
 
   // Fetch more results to filter client-side if needed
-  const limit = excludeSparkling ? 50 : 1;
+  const limit = excludeSparkling ? QUERY_LIMIT_WITH_FILTER : QUERY_LIMIT_NO_FILTER;
 
   let query = supabase
     .from('wine_instances')
@@ -53,11 +62,11 @@ async function fetchTopByTerm(term: string, excludeSparkling: boolean = false): 
   return data[0] as WineRow;
 }
 
-async function fetchBudgetAlternative(term: string, maxPrice: number = 15, excludeSparkling: boolean = false): Promise<WineRow | null> {
+async function fetchBudgetAlternative(term: string, maxPrice: number = PRICE_THRESHOLD_SHOW_WITH_MESSAGE, excludeSparkling: boolean = false): Promise<WineRow | null> {
   if (!supabase) return null;
 
   // Fetch more results to filter client-side if needed
-  const limit = excludeSparkling ? 50 : 1;
+  const limit = excludeSparkling ? QUERY_LIMIT_WITH_FILTER : QUERY_LIMIT_NO_FILTER;
 
   let query = supabase
     .from('wine_instances')
@@ -98,6 +107,12 @@ export interface WineRecommendation {
 }
 
 export async function fetchTopWineByKey(wineKey: string): Promise<WineRecommendation | null> {
+  // Validate input
+  const validationResult = wineKeySchema.safeParse(wineKey);
+  if (!validationResult.success) {
+    throw new Error(`Invalid wineKey: ${validationResult.error.message}`);
+  }
+
   if (!hasSupabaseConfig || !supabase || supabaseInitError) return null;
   const terms = wineKeySearchTerms[wineKey] || [wineKey.replace(/_/g, ' ')];
   const shouldExcludeSparkling = excludeSparklingFor.has(wineKey);
@@ -109,9 +124,9 @@ export async function fetchTopWineByKey(wineKey: string): Promise<WineRecommenda
 
     const price = topWine.specific_price;
 
-    // Never show wines over £50, find alternative without message
-    if (price !== null && price > 50) {
-      const budgetWine = await fetchBudgetAlternative(term, 20, shouldExcludeSparkling);
+    // Never show wines over the maximum threshold, find alternative without message
+    if (price !== null && price > PRICE_THRESHOLD_NEVER_SHOW) {
+      const budgetWine = await fetchBudgetAlternative(term, PRICE_THRESHOLD_SHOW_WITH_MESSAGE, shouldExcludeSparkling);
       if (budgetWine) {
         return { wine: budgetWine, isAlternative: false };
       }
@@ -119,12 +134,12 @@ export async function fetchTopWineByKey(wineKey: string): Promise<WineRecommenda
       continue;
     }
 
-    // If price is over £20 (but ≤ £50), show the expensive wine WITH message
-    if (price !== null && price > 20) {
+    // If price is over threshold (but not over max), show the expensive wine WITH message
+    if (price !== null && price > PRICE_THRESHOLD_SHOW_WITH_MESSAGE) {
       return { wine: topWine, isAlternative: true };
     }
 
-    // Price is £20 or less, return the top wine without message
+    // Price is at or below threshold, return the top wine without message
     return { wine: topWine, isAlternative: false };
   }
 

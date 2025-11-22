@@ -58,16 +58,19 @@ export const FlowWidget = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 md:p-6">
-      <div className="w-full max-w-[480px]">
+      <div className="w-full max-w-[530px]">
         {/* Main card */}
         <div className="bg-card rounded-[18px] shadow-lg p-6 md:p-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              Go with the flow
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2 text-justify">
+              What should you be drinking this Christmas?
             </h1>
-            <p className="text-base text-muted-foreground">
-              Answer a few questions and Helena will point you at your next bottle
+            <p className="text-base text-muted-foreground mb-3 text-justify">
+              Answer a few questions and Helena will sort you out
+            </p>
+            <p className="text-xs text-muted-foreground/80 italic leading-relaxed text-justify">
+              Full credit to Hannah Crosbie in this Saturday's Guardian Winter Food Guide (page 16-17) for this Go With The Flow Guide. Helena just added her actual wine recommendations for fun!
             </p>
           </div>
 
@@ -108,8 +111,8 @@ export const FlowWidget = () => {
         </div>
 
         {/* Footer hint */}
-        <p className="text-center text-xs text-muted-foreground mt-4">
-          Powered by HelenaSips
+        <p className="text-center text-xs text-muted-foreground mt-4 text-justify">
+          Shamelessly 'Inspired' by the Guardian
         </p>
       </div>
     </div>

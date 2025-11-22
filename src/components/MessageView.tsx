@@ -1,11 +1,14 @@
 /**
  * MessageView Component
  * Pure presentational component for displaying a message with a continue action
- * 
+ *
  * Props:
  * - message: string - The message text to display
  * - onNext: () => void - Callback when user wants to continue
  */
+
+import { memo } from 'react';
+import { BackButton } from './BackButton';
 
 interface MessageViewProps {
   message: string;
@@ -13,24 +16,16 @@ interface MessageViewProps {
   onBack?: () => void;
 }
 
-export const MessageView = ({ message, onNext, onBack }: MessageViewProps) => {
+export const MessageView = memo(({ message, onNext, onBack }: MessageViewProps) => {
   return (
-    <div className="animate-fade-in text-center">
+    <div className="animate-fade-in">
       {onBack && (
         <div className="text-left">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-sm font-medium text-muted-foreground 
-                     hover:text-foreground transition-colors mb-6 focus:outline-none 
-                     focus:ring-2 focus:ring-primary focus:ring-offset-2 
-                     focus:ring-offset-background rounded-full px-3 py-1"
-          >
-            Back
-          </button>
+          <BackButton onClick={onBack} />
         </div>
       )}
       <div className="mb-8">
-        <p className="text-lg md:text-xl text-foreground leading-relaxed">
+        <p className="text-lg md:text-xl text-foreground leading-relaxed text-justify">
           {message}
         </p>
       </div>
@@ -46,4 +41,4 @@ export const MessageView = ({ message, onNext, onBack }: MessageViewProps) => {
       </button>
     </div>
   );
-};
+});

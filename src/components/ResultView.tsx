@@ -13,9 +13,11 @@
  * - Replace wineName and blurb with actual wine details
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchTopWineByKey, type WineRecommendation } from '@/lib/wineService';
+import { BackButton } from './BackButton';
 
 interface ResultViewProps {
   wineName: string;
@@ -26,28 +28,12 @@ interface ResultViewProps {
 }
 
 export const ResultView = ({ wineName, wineKey, blurb, onRestart, onBack }: ResultViewProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [recommendation, setRecommendation] = useState<WineRecommendation | null>(null);
-
-  useEffect(() => {
-    let active = true;
-    async function run() {
-      if (!wineKey) return;
-      setLoading(true);
-      setError(null);
-      try {
-        const result = await fetchTopWineByKey(wineKey);
-        if (active) setRecommendation(result);
-      } catch (e: any) {
-        if (active) setError(e?.message || 'Failed to load wine details');
-      } finally {
-        if (active) setLoading(false);
-      }
-    }
-    run();
-    return () => { active = false; };
-  }, [wineKey]);
+  const { data: recommendation, isLoading: loading, error } = useQuery({
+    queryKey: ['wine', wineKey],
+    queryFn: () => fetchTopWineByKey(wineKey!),
+    enabled: !!wineKey,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
   const row = recommendation?.wine;
   const isAlternative = recommendation?.isAlternative || false;
@@ -59,18 +45,10 @@ export const ResultView = ({ wineName, wineKey, blurb, onRestart, onBack }: Resu
   }, [row]);
 
   return (
-    <div className="animate-fade-in text-center">
+    <div className="animate-fade-in">
       {onBack && (
         <div className="text-left">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-sm font-medium text-muted-foreground 
-                     hover:text-foreground transition-colors mb-6 focus:outline-none 
-                     focus:ring-2 focus:ring-primary focus:ring-offset-2 
-                     focus:ring-offset-background rounded-full px-3 py-1"
-          >
-            Back
-          </button>
+          <BackButton onClick={onBack} />
         </div>
       )}
       {/* Wine glass or bottle icon placeholder */}
@@ -81,19 +59,19 @@ export const ResultView = ({ wineName, wineKey, blurb, onRestart, onBack }: Resu
       </div>
 
       {/* Result heading */}
-      <h2 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wide">
+      <h2 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wide text-center">
         Your Perfect Match
       </h2>
 
       {/* Wine category - large and prominent */}
-      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6 leading-tight">
+      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6 leading-tight text-center">
         {wineName}
       </h1>
 
       {/* Alternative message */}
       {isAlternative && (
         <div className="mb-4 px-4">
-          <p className="text-base md:text-lg text-primary font-medium leading-relaxed">
+          <p className="text-base md:text-lg text-primary font-medium leading-relaxed text-justify">
             But we're not made of money, so try this one
           </p>
         </div>
@@ -102,7 +80,7 @@ export const ResultView = ({ wineName, wineKey, blurb, onRestart, onBack }: Resu
       {/* Wine description */}
       {!isAlternative && blurb && (
         <div className="mb-6 px-4">
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-justify">
             {blurb}
           </p>
         </div>
@@ -114,10 +92,10 @@ export const ResultView = ({ wineName, wineKey, blurb, onRestart, onBack }: Resu
           <Skeleton className="h-6 w-64" />
         </div>
       ) : error ? (
-        <p className="text-sm text-destructive mb-6">{error}</p>
+        <p className="text-sm text-destructive mb-6 text-justify">{error instanceof Error ? error.message : 'Failed to load wine details'}</p>
       ) : row && specificWineName ? (
         <div className="mb-8 px-4">
-          <p className="text-base md:text-lg text-foreground leading-relaxed">
+          <p className="text-base md:text-lg text-foreground leading-relaxed text-justify">
             Helena recommends{' '}
             <span className="font-semibold">{specificWineName}</span>
             {row.purchased_from_store && (
