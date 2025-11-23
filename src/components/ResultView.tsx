@@ -51,10 +51,10 @@ export const ResultView = ({ wineName, wineKey, blurb, onRestart, onBack }: Resu
           <BackButton onClick={onBack} />
         </div>
       )}
-      {/* Wine glass or bottle icon placeholder */}
+      {/* Christmas themed icon */}
       <div className="mb-6">
         <div className="w-20 h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
-          <span className="text-4xl">🍷</span>
+          <span className="text-4xl">🎄</span>
         </div>
       </div>
 
