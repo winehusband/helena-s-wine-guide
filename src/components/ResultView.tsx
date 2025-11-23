@@ -102,9 +102,9 @@ export const ResultView = ({ wineName, wineKey, blurb, showMostExpensive, onRest
         <div className="mb-8">
           <HelenaSpeechBubble
             spriteVariant={helena.spriteVariant}
-            position={helena.position}
+            showMagicalEffects={helena.showMagicalEffects}
           >
-            <p className="text-base md:text-lg text-foreground leading-relaxed text-justify">
+            <p className="text-base md:text-lg text-foreground leading-relaxed" style={{ margin: 0 }}>
               I recommend{' '}
               <span className="font-semibold">{specificWineName}</span>
               {row.purchased_from_store && (

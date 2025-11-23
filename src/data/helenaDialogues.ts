@@ -1,6 +1,7 @@
 /**
  * Helena Dialogues Data
- * Centralized content for Helena's speech bubbles across different contexts
+ * Centralized content for Helena's thought bubbles across different contexts
+ * Based on HelenasPicks-1 emoji character system
  * Follows Golden Rule 2.3: Separation of data from logic
  */
 
@@ -9,7 +10,7 @@ export type HelenaSpriteVariant = 'default' | 'talking' | 'recommending' | 'wavi
 export interface HelenaDialogue {
   message?: string;
   spriteVariant: HelenaSpriteVariant;
-  position: 'left' | 'right';
+  showMagicalEffects?: boolean;
 }
 
 /**
@@ -20,27 +21,23 @@ export const messageDialogues: Record<string, HelenaDialogue> = {
   closed_1: {
     message: undefined, // Uses message from flow node
     spriteVariant: 'talking',
-    position: 'left',
   },
   closed_2: {
     message: undefined, // Uses message from flow node
     spriteVariant: 'talking',
-    position: 'left',
   },
   whole_point_msg: {
     message: undefined, // Uses message from flow node
     spriteVariant: 'talking',
-    position: 'left',
   },
 };
 
 /**
  * Question node dialogues - Helena provides subtle presence
- * Can be extended per-question for context-aware commentary
+ * No thought bubble, just Helena holding wine glass
  */
 export const questionDialogues: HelenaDialogue = {
   spriteVariant: 'default',
-  position: 'right',
 };
 
 /**
@@ -48,7 +45,6 @@ export const questionDialogues: HelenaDialogue = {
  */
 export const resultDialogues: HelenaDialogue = {
   spriteVariant: 'recommending',
-  position: 'left',
 };
 
 /**

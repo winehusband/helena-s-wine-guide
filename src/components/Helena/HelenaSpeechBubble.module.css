@@ -1,105 +1,191 @@
 /**
- * HelenaSpeechBubble Scoped Styles
- * Festive Christmas-themed speech bubble with pixelated Helena sprite
+ * Helena Speech Bubble Styles - Emoji-based Design
+ * Based on HelenasPicks-1 emoji character system
  * Follows Golden Rule 5.5: Modular CSS - no global leaks
  */
 
-/* Container for Helena + speech bubble */
+/* Container for Helena + thought bubble */
 .container {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 1.5rem;
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
-.containerLeft {
-  flex-direction: row;
-}
-
-.containerRight {
-  flex-direction: row-reverse;
-}
-
-/* Pixelated Helena sprite */
-.sprite {
-  flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
-  animation: gentleBounce 2s ease-in-out infinite;
-}
-
-/* Speech bubble - Festive Christmas theme */
-.speechBubble {
+/* Thought bubble - appears above Helena */
+.thoughtBubble {
+  background-color: white;
+  border: 2px solid hsl(var(--forest));
+  border-radius: 20px;
+  padding: 12px 20px;
   position: relative;
-  background: hsl(var(--panel));
-  border: 2px solid hsl(var(--primary));
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  flex: 1;
-  box-shadow: 0 2px 8px rgba(219, 37, 143, 0.1);
+  min-width: 200px;
+  text-align: center;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(34, 68, 72, 0.1);
 }
 
-/* Speech bubble tail (pointer) - Left side */
-.speechBubbleLeft::before {
-  content: '';
+/* Magical mode thought bubble */
+.thoughtBubbleMagical {
+  border-color: hsl(var(--primary));
+  box-shadow: 0 2px 8px rgba(219, 37, 143, 0.3);
+  min-width: 280px;
+}
+
+/* Thought bubble tail pointing down to Helena */
+.thoughtTail {
   position: absolute;
-  left: -12px;
-  top: 20px;
+  bottom: -10px;
+  left: 30px;
   width: 0;
   height: 0;
-  border-style: solid;
-  border-width: 10px 12px 10px 0;
-  border-color: transparent hsl(var(--primary)) transparent transparent;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid white;
 }
 
-.speechBubbleLeft::after {
-  content: '';
-  position: absolute;
-  left: -8px;
-  top: 22px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 10px 8px 0;
-  border-color: transparent hsl(var(--panel)) transparent transparent;
-}
-
-/* Speech bubble tail (pointer) - Right side */
-.speechBubbleRight::before {
-  content: '';
-  position: absolute;
-  right: -12px;
-  top: 20px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 10px 0 10px 12px;
-  border-color: transparent transparent transparent hsl(var(--primary));
-}
-
-.speechBubbleRight::after {
-  content: '';
-  position: absolute;
-  right: -8px;
-  top: 22px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 0 8px 10px;
-  border-color: transparent transparent transparent hsl(var(--panel));
-}
-
-/* Message text */
-.message {
+/* Message text inside bubble */
+.thoughtText {
   font-size: 1rem;
-  line-height: 1.6;
-  color: hsl(var(--foreground));
+  color: hsl(var(--forest));
+  font-weight: 600;
+  line-height: 1.5;
   margin: 0;
-  text-align: justify;
+  animation: textFadeIn 0.3s ease-in-out;
+}
+
+.thoughtTextMagical {
+  font-style: italic;
+}
+
+/* Helena avatar (emoji-based) */
+.helenaAvatar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.helenaHead {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.wineGlass,
+.notepad {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.magicWand {
+  font-size: 28px;
+  line-height: 1;
+  transform: rotate(45deg);
+}
+
+/* Magical mode extras */
+.sparkles {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  animation: sparkle 1.6s ease-in-out infinite;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 20px;
+  color: hsl(var(--primary));
+}
+
+.sparkle:nth-child(1) {
+  top: 0;
+  left: 10px;
+  animation-delay: 0s;
+}
+
+.sparkle:nth-child(2) {
+  top: 10px;
+  right: 20px;
+  font-size: 16px;
+  animation-delay: 0.4s;
+}
+
+.sparkle:nth-child(3) {
+  top: 20px;
+  left: 30px;
+  font-size: 18px;
+  animation-delay: 0.8s;
+}
+
+.sparkle:nth-child(4) {
+  top: 5px;
+  left: 60px;
+  font-size: 14px;
+  animation-delay: 1.2s;
+}
+
+.magicianHat {
+  position: absolute;
+  top: -30px;
+  left: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hatText {
+  font-size: 32px;
+  line-height: 1;
+  transform: rotate(15deg);
+}
+
+.hatStar {
+  position: absolute;
+  top: 2px;
+  left: 12px;
+  font-size: 12px;
+  color: hsl(var(--primary));
+}
+
+.magicCircle {
+  position: absolute;
+  bottom: -60px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed hsl(var(--primary));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circleSymbol {
+  position: absolute;
+  font-size: 20px;
+}
+
+.circleSymbol:nth-child(1) {
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.circleSymbol:nth-child(2) {
+  top: 10px;
+  right: 10px;
+}
+
+.circleSymbol:nth-child(3) {
+  bottom: 10px;
+  left: 10px;
+}
+
+.circleSymbol:nth-child(4) {
+  bottom: 10px;
+  right: 10px;
 }
 
 /* Animations */
@@ -114,35 +200,47 @@
   }
 }
 
-@keyframes gentleBounce {
+@keyframes textFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sparkle {
   0%, 100% {
-    transform: translateY(0);
+    opacity: 0;
+    transform: scale(0.8);
   }
   50% {
-    transform: translateY(-4px);
+    opacity: 1;
+    transform: scale(1.2);
   }
 }
 
 /* Responsive design */
 @media (max-width: 640px) {
-  .container {
-    flex-direction: column !important;
-    align-items: center;
+  .helenaHead {
+    font-size: 40px;
   }
 
-  .sprite {
-    width: 56px;
-    height: 56px;
+  .wineGlass,
+  .notepad {
+    font-size: 28px;
   }
 
-  .speechBubbleLeft::before,
-  .speechBubbleLeft::after,
-  .speechBubbleRight::before,
-  .speechBubbleRight::after {
-    display: none;
+  .magicWand {
+    font-size: 24px;
   }
 
-  .speechBubble {
-    width: 100%;
+  .thoughtBubble {
+    min-width: 180px;
+    padding: 10px 16px;
+  }
+
+  .thoughtText {
+    font-size: 0.9rem;
   }
 }

@@ -30,15 +30,11 @@ export const QuestionView = memo(({ question, options, onBack }: QuestionViewPro
     <div className="animate-fade-in">
       {onBack && <BackButton onClick={onBack} />}
 
-      {/* Helena presence - subtle, no speech bubble for questions */}
+      {/* Helena presence - subtle emoji, no speech bubble for questions */}
       {helena.shouldShow && (
-        <div className="flex justify-end mb-4">
-          <img
-            src="/helena/helena-default.svg"
-            alt="Helena"
-            className="w-12 h-12 opacity-60"
-            style={{ imageRendering: 'pixelated' }}
-          />
+        <div className="flex justify-end mb-4 opacity-70">
+          <span style={{ fontSize: '32px' }}>👱‍♀️</span>
+          <span style={{ fontSize: '24px' }}>🍷</span>
         </div>
       )}
 

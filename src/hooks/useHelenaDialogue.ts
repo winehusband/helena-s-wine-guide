@@ -1,6 +1,7 @@
 /**
  * useHelenaDialogue Hook
  * Shared logic for Helena character appearance across different flow contexts
+ * Based on HelenasPicks-1 emoji character system
  * Follows Golden Rules 2.4 (DRY) and 2.5 (Extract shared logic to hooks)
  */
 
@@ -11,7 +12,7 @@ export interface UseHelenaDialogueResult {
   shouldShow: boolean;
   message?: string;
   spriteVariant: HelenaSpriteVariant;
-  position: 'left' | 'right';
+  showMagicalEffects?: boolean;
 }
 
 export interface UseHelenaDialogueOptions {
@@ -49,7 +50,7 @@ export function useHelenaDialogue(options: UseHelenaDialogueOptions): UseHelenaD
         shouldShow: false,
         message: undefined,
         spriteVariant: 'default' as HelenaSpriteVariant,
-        position: 'left' as const,
+        showMagicalEffects: false,
       };
     }
 
@@ -61,7 +62,7 @@ export function useHelenaDialogue(options: UseHelenaDialogueOptions): UseHelenaD
         shouldShow: false,
         message: undefined,
         spriteVariant: 'default' as HelenaSpriteVariant,
-        position: 'left' as const,
+        showMagicalEffects: false,
       };
     }
 
@@ -69,7 +70,7 @@ export function useHelenaDialogue(options: UseHelenaDialogueOptions): UseHelenaD
       shouldShow: true,
       message: customMessage || dialogue.message,
       spriteVariant: dialogue.spriteVariant,
-      position: dialogue.position,
+      showMagicalEffects: dialogue.showMagicalEffects || false,
     };
   }, [context, nodeId, customMessage, forceHide]);
 

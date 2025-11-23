@@ -40,7 +40,7 @@ export const MessageView = memo(({ message, nodeId, onNext, onBack }: MessageVie
           <HelenaSpeechBubble
             message={helena.message}
             spriteVariant={helena.spriteVariant}
-            position={helena.position}
+            showMagicalEffects={helena.showMagicalEffects}
           />
         </div>
       ) : (
