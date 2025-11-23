@@ -93,6 +93,7 @@ export const FlowWidget = () => {
             {currentNode.type === 'message' && (
               <MessageView
                 message={currentNode.text}
+                nodeId={currentNode.id}
                 onNext={() => goTo(currentNode.nextId)}
                 onBack={canGoBack ? handleBack : undefined}
               />

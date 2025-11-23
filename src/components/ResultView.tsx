@@ -18,6 +18,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchTopWineByKey, type WineRecommendation } from '@/lib/wineService';
 import { BackButton } from './BackButton';
+import { useHelenaDialogue } from '@/hooks/useHelenaDialogue';
+import { HelenaSpeechBubble } from '@/components/Helena';
 
 interface ResultViewProps {
   wineName: string;
@@ -29,6 +31,8 @@ interface ResultViewProps {
 }
 
 export const ResultView = ({ wineName, wineKey, blurb, showMostExpensive, onRestart, onBack }: ResultViewProps) => {
+  const helena = useHelenaDialogue({ context: 'result' });
+
   const { data: recommendation, isLoading: loading, error } = useQuery({
     queryKey: ['wine', wineKey, showMostExpensive],
     queryFn: () => fetchTopWineByKey(wineKey!, showMostExpensive),
@@ -94,22 +98,27 @@ export const ResultView = ({ wineName, wineKey, blurb, showMostExpensive, onRest
         </div>
       ) : error ? (
         <p className="text-sm text-destructive mb-6 text-justify">{error instanceof Error ? error.message : 'Failed to load wine details'}</p>
-      ) : row && specificWineName ? (
-        <div className="mb-8 px-4">
-          <p className="text-base md:text-lg text-foreground leading-relaxed text-justify">
-            Helena recommends{' '}
-            <span className="font-semibold">{specificWineName}</span>
-            {row.purchased_from_store && (
-              <>
-                {' '}from <span className="font-medium">{row.purchased_from_store}</span>
-              </>
-            )}
-            {displayPrice && (
-              <>
-                {' '}for <span className="font-semibold">{displayPrice}</span>
-              </>
-            )}
-          </p>
+      ) : row && specificWineName && helena.shouldShow ? (
+        <div className="mb-8">
+          <HelenaSpeechBubble
+            spriteVariant={helena.spriteVariant}
+            position={helena.position}
+          >
+            <p className="text-base md:text-lg text-foreground leading-relaxed text-justify">
+              I recommend{' '}
+              <span className="font-semibold">{specificWineName}</span>
+              {row.purchased_from_store && (
+                <>
+                  {' '}from <span className="font-medium">{row.purchased_from_store}</span>
+                </>
+              )}
+              {displayPrice && (
+                <>
+                  {' '}for <span className="font-semibold">{displayPrice}</span>
+                </>
+              )}
+            </p>
+          </HelenaSpeechBubble>
         </div>
       ) : null}
 

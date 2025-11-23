@@ -9,6 +9,8 @@
 
 import { memo } from 'react';
 import { BackButton } from './BackButton';
+import { useHelenaDialogue } from '@/hooks/useHelenaDialogue';
+import { HelenaSpeechBubble } from '@/components/Helena';
 
 interface QuestionOption {
   label: string;
@@ -22,9 +24,24 @@ interface QuestionViewProps {
 }
 
 export const QuestionView = memo(({ question, options, onBack }: QuestionViewProps) => {
+  const helena = useHelenaDialogue({ context: 'question' });
+
   return (
     <div className="animate-fade-in">
       {onBack && <BackButton onClick={onBack} />}
+
+      {/* Helena presence - subtle, no speech bubble for questions */}
+      {helena.shouldShow && (
+        <div className="flex justify-end mb-4">
+          <img
+            src="/helena/helena-default.svg"
+            alt="Helena"
+            className="w-12 h-12 opacity-60"
+            style={{ imageRendering: 'pixelated' }}
+          />
+        </div>
+      )}
+
       <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-8 leading-relaxed text-justify">
         {question}
       </h2>

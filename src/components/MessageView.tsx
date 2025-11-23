@@ -9,14 +9,23 @@
 
 import { memo } from 'react';
 import { BackButton } from './BackButton';
+import { useHelenaDialogue } from '@/hooks/useHelenaDialogue';
+import { HelenaSpeechBubble } from '@/components/Helena';
 
 interface MessageViewProps {
   message: string;
+  nodeId?: string;
   onNext: () => void;
   onBack?: () => void;
 }
 
-export const MessageView = memo(({ message, onNext, onBack }: MessageViewProps) => {
+export const MessageView = memo(({ message, nodeId, onNext, onBack }: MessageViewProps) => {
+  const helena = useHelenaDialogue({
+    context: 'message',
+    nodeId,
+    customMessage: message,
+  });
+
   return (
     <div className="animate-fade-in">
       {onBack && (
@@ -24,11 +33,23 @@ export const MessageView = memo(({ message, onNext, onBack }: MessageViewProps) 
           <BackButton onClick={onBack} />
         </div>
       )}
-      <div className="mb-8">
-        <p className="text-lg md:text-xl text-foreground leading-relaxed text-justify">
-          {message}
-        </p>
-      </div>
+
+      {/* Helena delivers the message */}
+      {helena.shouldShow ? (
+        <div className="mb-8">
+          <HelenaSpeechBubble
+            message={helena.message}
+            spriteVariant={helena.spriteVariant}
+            position={helena.position}
+          />
+        </div>
+      ) : (
+        <div className="mb-8">
+          <p className="text-lg md:text-xl text-foreground leading-relaxed text-justify">
+            {message}
+          </p>
+        </div>
+      )}
 
       <button
         onClick={onNext}

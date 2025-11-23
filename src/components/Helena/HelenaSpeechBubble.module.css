@@ -1,0 +1,148 @@
+/**
+ * HelenaSpeechBubble Scoped Styles
+ * Festive Christmas-themed speech bubble with pixelated Helena sprite
+ * Follows Golden Rule 5.5: Modular CSS - no global leaks
+ */
+
+/* Container for Helena + speech bubble */
+.container {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.containerLeft {
+  flex-direction: row;
+}
+
+.containerRight {
+  flex-direction: row-reverse;
+}
+
+/* Pixelated Helena sprite */
+.sprite {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  animation: gentleBounce 2s ease-in-out infinite;
+}
+
+/* Speech bubble - Festive Christmas theme */
+.speechBubble {
+  position: relative;
+  background: hsl(var(--panel));
+  border: 2px solid hsl(var(--primary));
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  flex: 1;
+  box-shadow: 0 2px 8px rgba(219, 37, 143, 0.1);
+}
+
+/* Speech bubble tail (pointer) - Left side */
+.speechBubbleLeft::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 20px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 12px 10px 0;
+  border-color: transparent hsl(var(--primary)) transparent transparent;
+}
+
+.speechBubbleLeft::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 22px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 10px 8px 0;
+  border-color: transparent hsl(var(--panel)) transparent transparent;
+}
+
+/* Speech bubble tail (pointer) - Right side */
+.speechBubbleRight::before {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: 20px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 12px;
+  border-color: transparent transparent transparent hsl(var(--primary));
+}
+
+.speechBubbleRight::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 22px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 0 8px 10px;
+  border-color: transparent transparent transparent hsl(var(--panel));
+}
+
+/* Message text */
+.message {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: hsl(var(--foreground));
+  margin: 0;
+  text-align: justify;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gentleBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .container {
+    flex-direction: column !important;
+    align-items: center;
+  }
+
+  .sprite {
+    width: 56px;
+    height: 56px;
+  }
+
+  .speechBubbleLeft::before,
+  .speechBubbleLeft::after,
+  .speechBubbleRight::before,
+  .speechBubbleRight::after {
+    display: none;
+  }
+
+  .speechBubble {
+    width: 100%;
+  }
+}

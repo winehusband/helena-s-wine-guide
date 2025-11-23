@@ -1,0 +1,14 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Placeholder for recommending Helena sprite - Replace with pixel art -->
+  <rect width="64" height="64" fill="#f8ebdd"/>
+  <circle cx="32" cy="24" r="12" fill="#ffd700"/>
+  <circle cx="28" cy="22" r="2" fill="#000"/>
+  <circle cx="36" cy="22" r="2" fill="#000"/>
+  <path d="M 26 28 Q 32 32 38 28" stroke="#000" stroke-width="1" fill="none"/>
+  <rect x="22" y="36" width="20" height="24" fill="#db258f"/>
+  <rect x="18" y="42" width="8" height="16" fill="#f8ebdd"/>
+  <rect x="38" y="42" width="8" height="16" fill="#f8ebdd"/>
+  <!-- Wine glass -->
+  <path d="M 48 48 L 50 56 L 54 56 L 56 48 Z" fill="#224448" opacity="0.6"/>
+  <rect x="51" y="56" width="2" height="4" fill="#224448"/>
+</svg>
