@@ -23,14 +23,15 @@ interface ResultViewProps {
   wineName: string;
   wineKey?: string;
   blurb?: string;
+  showMostExpensive?: boolean;
   onRestart: () => void;
   onBack?: () => void;
 }
 
-export const ResultView = ({ wineName, wineKey, blurb, onRestart, onBack }: ResultViewProps) => {
+export const ResultView = ({ wineName, wineKey, blurb, showMostExpensive, onRestart, onBack }: ResultViewProps) => {
   const { data: recommendation, isLoading: loading, error } = useQuery({
-    queryKey: ['wine', wineKey],
-    queryFn: () => fetchTopWineByKey(wineKey!),
+    queryKey: ['wine', wineKey, showMostExpensive],
+    queryFn: () => fetchTopWineByKey(wineKey!, showMostExpensive),
     enabled: !!wineKey,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

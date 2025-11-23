@@ -103,6 +103,7 @@ export const FlowWidget = () => {
                 wineName={currentNode.wine}
                 wineKey={currentNode.wineKey}
                 blurb={currentNode.blurb}
+                showMostExpensive={currentNode.showMostExpensive}
                 onRestart={handleRestart}
                 onBack={canGoBack ? handleBack : undefined}
               />

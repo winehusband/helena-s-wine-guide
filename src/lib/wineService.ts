@@ -106,7 +106,7 @@ export interface WineRecommendation {
   isAlternative: boolean; // true if showing an expensive wine (> £20) with "not made of money" message
 }
 
-export async function fetchTopWineByKey(wineKey: string): Promise<WineRecommendation | null> {
+export async function fetchTopWineByKey(wineKey: string, showMostExpensive: boolean = false): Promise<WineRecommendation | null> {
   // Validate input
   const validationResult = wineKeySchema.safeParse(wineKey);
   if (!validationResult.success) {
@@ -121,6 +121,11 @@ export async function fetchTopWineByKey(wineKey: string): Promise<WineRecommenda
     // First, get the highest-rated wine
     const topWine = await fetchTopByTerm(term, shouldExcludeSparkling);
     if (!topWine) continue;
+
+    // If showMostExpensive is true, skip all price filtering and just return the top wine
+    if (showMostExpensive) {
+      return { wine: topWine, isAlternative: false };
+    }
 
     const price = topWine.specific_price;
 

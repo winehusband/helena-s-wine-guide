@@ -213,7 +213,8 @@
       "id": "champagne",
       "type": "wine",
       "wine": "Champagne",
-      "wineKey": "champagne"
+      "wineKey": "champagne",
+      "showMostExpensive": true
     }
   }
 }

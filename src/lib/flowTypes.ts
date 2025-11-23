@@ -24,6 +24,7 @@ export interface WineNode extends BaseNode {
   wine: string; // display name
   wineKey: string; // stable key for lookup
   blurb?: string;
+  showMostExpensive?: boolean; // if true, ignore price limits and show the most expensive option
 }
 
 export type FlowNode = QuestionNode | MessageNode | WineNode;
@@ -59,6 +60,7 @@ const wineSchema = z.object({
   wine: z.string(),
   wineKey: z.string(),
   blurb: z.string().optional(),
+  showMostExpensive: z.boolean().optional(),
 });
 
 export const flowNodeSchema = z.union([questionSchema, messageSchema, wineSchema]);
